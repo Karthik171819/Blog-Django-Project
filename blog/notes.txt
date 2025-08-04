@@ -1,0 +1,6 @@
+pip install
+1. faker
+2. pymysql
+3. django
+4. mysqlclient
+5.django-pagination
