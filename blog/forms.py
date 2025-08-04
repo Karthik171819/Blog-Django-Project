@@ -1,0 +1,57 @@
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+
+#creating form for contact_page
+class ContactForm(forms.Form):
+    name = forms.CharField(label='name', max_length=100, required=True)
+    email = forms.EmailField(label='Email', required=True)
+    message = forms.CharField(label='Message', required=True)
+
+#create a class or model for register_FORM
+class RegisterForm(forms.ModelForm):
+    username = forms.CharField(label='Username',max_length=100, required=True)
+    email = forms.CharField(label='Email', max_length=100, required=True)
+    password = forms.CharField(label='Password', max_length=100, required=True)
+    password_confirm = forms.CharField(label='Confirm Password', max_length=100, required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+#custom validation for register form Non filed errors
+    def clean(self):#clean() is inbuilt method
+        cleaned_data = super().clean() #super class is ModelForm
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
+
+        if password and password_confirm and password != password_confirm:
+            raise forms.ValidationError("Passwords do not match")
+
+#login_form
+class LoginForm(forms.Form): #for field errors validation
+    username = forms.CharField(label='username',max_length=100, required=True)
+    password = forms.CharField(label='password',max_length=100, required=True)
+    
+    #handling login process
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get("username")
+        password = cleaned_data.get("password")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user is None:
+                raise forms.ValidationError("Invalid user and Password")
+
+#forgot_password_form
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(label='Email', max_length=254, required=True)
+
+    #checking the real-user e-mail_id are available in database
+    def clean(self):
+        cleaned_data = super.clean()
+        email = cleaned_data.get('email')
+
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("No User Registered With This E-mail")
