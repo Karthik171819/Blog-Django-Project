@@ -15,6 +15,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 # Create your views here.
 #static demo data
@@ -125,15 +127,27 @@ def forgot_password(request):
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
-            email = form.changed_data['email']
+            email = form.cleaned_data['email']
             user = User.objects.get(email=email)
             #reset email sending to user
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             current_site = get_current_site(request) #http://127.0.0.1:8000
+            domain = current_site.domain
+            subject =" Reset Password Requested"
+            message = render_to_string('blog/reset_password_email.html',{
+                'domain':domain,
+                'uid':uid,
+                'token':token
+                })
             
-            
+            #sending mail 
+            send_mail(subject, message, 'noreply@example.com',[email])
+            messages.success(request,'Email has been sent')
 
-            
-
+    
     return render(request, 'blog/forgot_password.html')
+
+#reset_password_email
+def reset_password(request):
+    pass
