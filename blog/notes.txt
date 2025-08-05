@@ -12,3 +12,5 @@ pip install
 7.Email Configuration
   send_mail() function pass the manadatory parameters like subjet, message, email 
   create a EMAIL_BACKEND constant import smtp module from django
+
+8.Reset Password
