@@ -21,8 +21,9 @@
     <!--Success Messages-->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-success">
+            <div class="alert  {% if message.tag == 'success'%} alert-success {% else %} alert-danger {% endif %} alert-dismissible fade show">
                 {{message}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" arial-label="close"></button>
             </div>
         {% endfor %}   
     {% endif %}

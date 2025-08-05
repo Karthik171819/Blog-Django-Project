@@ -152,3 +152,10 @@ LOGGING = {
     },
 }
 
+DEFAULT_FROM_EMAIL = 'your_email@karthik.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '44df373c212713'
+EMAIL_HOST_PASSWORD='6372472d1b4233'
