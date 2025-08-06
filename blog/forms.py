@@ -77,7 +77,7 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
     content = forms.CharField(label='Content', required=True)
     category = forms.ModelChoiceField(label='Category', required=True, queryset=Category.objects.all()) #its showing list of category_options
 
-    class meta:
+    class Meta:
         model = Post #its a type of model
         fields =['title', 'content', 'category'] #these fields are linked to Post table when we insert the data
     
