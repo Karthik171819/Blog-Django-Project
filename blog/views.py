@@ -115,7 +115,15 @@ def login(request):
 #dashboard
 def dashboard(request):
     blog_title = "My Posts"
-    return render(request, 'blog/dashboard.html', {'blog_title':blog_title})
+    #getting user posts
+    all_posts = Post.objects.filter(user=request.user)
+
+    #paginate
+    paginator = Paginator(all_posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'blog/dashboard.html', {'blog_title': blog_title, 'page_obj': page_obj})
 
 #logout
 def logout(request):
