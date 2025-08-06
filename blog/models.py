@@ -2,8 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 # Create your models here.
 
-#category 
-
+#category
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -11,7 +10,6 @@ class Category(models.Model):
         return self.name
 
 #remeber after creating model please make sure migrate it
-
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -30,7 +28,6 @@ class Post(models.Model):
         return self.title
 
 #dynamic content for about_us page
-
 class AboutUs(models.Model):
     content = models.TextField()
 
