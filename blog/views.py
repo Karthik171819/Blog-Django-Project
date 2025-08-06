@@ -190,7 +190,7 @@ def new_post(request):
         #creating form
         form = PostForm(request.POST)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
             post.user = request.user #to display the user_id in post table
             post.save() #to display the post in dashboard recently created
             return redirect('blog:dashboard')

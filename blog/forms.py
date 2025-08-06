@@ -92,3 +92,12 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
         
         if content and len(content) < 10:
             raise forms.ValidationError('Content must be atleast 10 characters long')
+        
+    def save(self, commit = ...):
+        post = super().save(commit)
+        img_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/450px-No_image_available.svg.png"
+        
+        post.img_url = img_url
+        if commit:
+            post.save()
+        return post
