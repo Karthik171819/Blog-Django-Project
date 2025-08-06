@@ -76,6 +76,7 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
     title = forms.CharField(label='Title', max_length=200, required=True)
     content = forms.CharField(label='Content', required=True)
     category = forms.ModelChoiceField(label='Category', required=True, queryset=Category.objects.all()) #its showing list of category_options
+    img_url = forms.ImageField(label='Image', required=False)
 
     class Meta:
         model = Post #its a type of model
@@ -85,6 +86,7 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
         cleaned_data=super().clean()
         title = cleaned_data.get('title')
         content = cleaned_data.get('content')
+        
 
         #custom validation for title and content about characters
         if title and len(title) < 5:
@@ -95,9 +97,13 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
         
     def save(self, commit):
         post = super().save(commit)
-        img_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/450px-No_image_available.svg.png"
-        
-        post.img_url = img_url
+        cleaned_data=super().clean()
+
+        if cleaned_data.get('img_url'):
+            post.img_url = cleaned_data.get('img_url')
+        else:
+            img_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/450px-No_image_available.svg.png"
+            post.img_url = img_url
         if commit:
             post.save()
         return post

@@ -163,4 +163,4 @@ EMAIL_HOST_PASSWORD='6372472d1b4233'
 #Media Url
 import os
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

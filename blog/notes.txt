@@ -1,0 +1,30 @@
+pip install
+1. faker
+2. pymysql
+3. django
+4. mysqlclient
+5.django-pagination
+
+6.run the command for inserting data into database
+    python manage.py populate_categories
+    python manage.py populate_posts
+
+7.Email Configuration
+  send_mail() function pass the manadatory parameters like subjet, message, email 
+  create a EMAIL_BACKEND constant import smtp module from django
+in settings.py
+DEFAULT_FROM_EMAIL = 'your_email@name.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'paste from site'
+EMAIL_HOST_PASSWORD='paste from site'
+
+8.Reset Password
+
+9.Media Url
+in settings.py
+  import os
+  MEDIA_URL = '/media/'
+  MEDIA_ROOT = os.path.join(BASE_DIR)
