@@ -188,7 +188,7 @@ def new_post(request):
     form = PostForm()
     if request.method == 'POST':
         #creating form
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user #to display the user_id in post table

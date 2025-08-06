@@ -14,7 +14,7 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    img_url = models.URLField(null=True)
+    img_url = models.ImageField(null=True, upload_to= "posts/images") #change the field from Url to ImageField to upload image
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

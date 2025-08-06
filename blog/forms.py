@@ -79,7 +79,7 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
 
     class Meta:
         model = Post #its a type of model
-        fields =['title', 'content', 'category'] #these fields are linked to Post table when we insert the data
+        fields =['title', 'content', 'category', 'img_url'] #these fields are linked to Post table when we insert the data
     
     def clean(self):
         cleaned_data=super().clean()
@@ -93,7 +93,7 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
         if content and len(content) < 10:
             raise forms.ValidationError('Content must be atleast 10 characters long')
         
-    def save(self, commit = ...):
+    def save(self, commit):
         post = super().save(commit)
         img_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/450px-No_image_available.svg.png"
         

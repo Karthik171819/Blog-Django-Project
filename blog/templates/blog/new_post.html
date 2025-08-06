@@ -9,7 +9,7 @@
                     <!-- Error messages -->
                     {% include 'blog/includes/errors.html' %}
                 <div class="my-3">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="title" class="form-label">Title</label>
@@ -20,6 +20,11 @@
                             <label for="content" class="form-label">Content</label>
                             <textarea class="form-control" id="content" name="content"></textarea>
                         </div>
+
+                        <div class="form-group">
+                            <label for='image' class="form-label">image</label>
+                            <input type="file" name="img_url" id="img_url" class='form-control-file'>
+
     
                         <div class="form-group">
                             <label for="category" class="form-label">Category</label>
