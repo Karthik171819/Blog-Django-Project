@@ -3,6 +3,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
+from blog.models import Category
+
 #creating form for contact_page
 class ContactForm(forms.Form):
     name = forms.CharField(label='name', max_length=100, required=True)
@@ -56,7 +58,7 @@ class ForgotPasswordForm(forms.Form):
 
         if not User.objects.filter(email=email).exists():
             raise forms.ValidationError("No User Registered With This E-mail")
-
+#ResetPasswordForm
 class ResetPasswordForm(forms.Form):
     new_password = forms.CharField(label='New Password', min_length=8)
     confirm_password = forms.CharField(label='Confirm Password', min_length=8)
@@ -68,3 +70,9 @@ class ResetPasswordForm(forms.Form):
 
         if new_password and confirm_password and new_password != confirm_password:
             raise forms.ValidationError("Password do not match")
+
+#creating a new_post form, whenever you create a Model Form create as well meta class also.
+class PostForm(forms.ModelForm): #using ModelForm here because of posts are going to be add on in blog_post table when newly created
+    title = forms.CharField(label='Title', max_length=200, required=True)
+    content = forms.CharField(label='Content', required=True)
+    category = forms.ModelChoiceField(label='Category', required=True, queryset=Category.objects.all())
