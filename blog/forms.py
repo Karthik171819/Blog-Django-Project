@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from blog.models import Category
+from blog.models import Category, Post
 
 #creating form for contact_page
 class ContactForm(forms.Form):
@@ -72,7 +72,23 @@ class ResetPasswordForm(forms.Form):
             raise forms.ValidationError("Password do not match")
 
 #creating a new_post form, whenever you create a Model Form create as well meta class also.
-class PostForm(forms.ModelForm): #using ModelForm here because of posts are going to be add on in blog_post table when newly created
+class PostForm(forms.ModelForm): #using ModelForm here because of posts are going to be add on in blog_post table when user newly created
     title = forms.CharField(label='Title', max_length=200, required=True)
     content = forms.CharField(label='Content', required=True)
-    category = forms.ModelChoiceField(label='Category', required=True, queryset=Category.objects.all())
+    category = forms.ModelChoiceField(label='Category', required=True, queryset=Category.objects.all()) #its showing list of category_options
+
+    class meta:
+        model = Post #its a type of model
+        fields =['title', 'content', 'category'] #these fields are linked to Post table when we insert the data
+    
+    def clean(self):
+        cleaned_data=super().clean()
+        title = cleaned_data.get('title')
+        content = cleaned_data.get('content')
+
+        #custom validation for title and content about characters
+        if title and len(title) < 5:
+            raise forms.ValidationError('Title must be atleast 5 Characters long')
+        
+        if content and len(content) < 10:
+            raise forms.ValidationError('Content must be atleast 10 characters long')
