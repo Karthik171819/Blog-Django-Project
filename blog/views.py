@@ -5,7 +5,7 @@ import logging
 from .models import Category, Post, AboutUs
 from django.http import Http404
 from django.core.paginator import Paginator
-from .forms import ContactForm, ForgotPasswordForm, RegisterForm, LoginForm, ResetPasswordForm
+from .forms import ContactForm, ForgotPasswordForm, RegisterForm, LoginForm, ResetPasswordForm, PostForm
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -185,6 +185,14 @@ def reset_password(request, uidb64, token):
 #new_post 
 def new_post(request):
     categories = Category.objects.all() #getting the data
+    form = PostForm()
     if request.method == 'POST':
         #creating form
-    return render(request, 'blog/new_post.html', {'categories': categories})
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            post.user = request.user #to display the user_id in post table
+            post.save() #to display the post in dashboard recently created
+            return redirect('blog:dashboard')
+
+    return render(request, 'blog/new_post.html', {'categories': categories, 'form':form})
