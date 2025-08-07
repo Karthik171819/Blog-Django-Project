@@ -184,7 +184,7 @@ def reset_password(request, uidb64, token):
 
 #new_post 
 def new_post(request):
-    categories = Category.objects.all() #getting the data
+    categories = Category.objects.all() #getting the categories data
     form = PostForm()
     if request.method == 'POST':
         #creating form
@@ -196,3 +196,8 @@ def new_post(request):
             return redirect('blog:dashboard')
 
     return render(request, 'blog/new_post.html', {'categories': categories, 'form':form})
+
+#edit posts
+def edit_post(request, post_id):
+    categories = Category.objects.all() #getting the categories data
+    return render(request, 'blog/edit_post.html', {'categories': categories})
