@@ -95,8 +95,8 @@ class PostForm(forms.ModelForm): #using ModelForm here because of posts are goin
         if content and len(content) < 10:
             raise forms.ValidationError('Content must be atleast 10 characters long')
         
-    def save(self, commit):
-        post = super().save(commit)
+    def save(self, commit = True): #default calling without any arguments calling
+        post = super().save(commit = False) #lets you make changes to the object before saving
         cleaned_data=super().clean()
 
         if cleaned_data.get('img_url'):
