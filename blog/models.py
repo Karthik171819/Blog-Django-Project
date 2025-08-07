@@ -20,12 +20,15 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-
-
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-
+    
+    #customizing for img_url which are getting from e-site
+    @property
+    def formatted_img_url(self):
+        url = self.img_url if self.img_url.__str__().startswith(('http://','https://')) else self.img_url.url
+        return url
 
     def __str__(self):
         return self.title
