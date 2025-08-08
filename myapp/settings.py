@@ -164,3 +164,6 @@ EMAIL_HOST_PASSWORD='6372472d1b4233'
 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#login required urls
+LOGIN_URL = '/login' #from url
