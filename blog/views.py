@@ -17,6 +17,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 #static demo data
@@ -29,7 +30,7 @@ from django.core.mail import send_mail
 def index(request):
     blog_title="Latest Posts"
     #getting data from Post Model
-    all_posts = Post.objects.all()
+    all_posts = Post.objects.filter(is_published=True)
 
     #paginate
     paginator = Paginator(all_posts, 5)
@@ -182,7 +183,8 @@ def reset_password(request, uidb64, token):
 
     return render(request, 'blog/reset_password.html', {'form':form})
 
-#new_post 
+#new_post
+@login_required
 def new_post(request):
     categories = Category.objects.all() #getting the categories data
     form = PostForm()
@@ -198,6 +200,7 @@ def new_post(request):
     return render(request, 'blog/new_post.html', {'categories': categories, 'form':form})
 
 #edit posts
+@login_required
 def edit_post(request, post_id):
     categories = Category.objects.all() #getting the categories data
     post = get_object_or_404(Post, id=post_id) #passing the model Post and col_name=post_id
@@ -211,9 +214,20 @@ def edit_post(request, post_id):
     return render(request, 'blog/edit_post.html', {'categories': categories, 'post': post, 'form':form})
 
 #delete post
+@login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post.delete()
     messages.success(request, "Post deleted successfully!")
     return redirect("blog:dashboard")
+
+#publish post
+@login_required
+def publish_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.is_published=True
+    post.save()
+    messages.success(request, "Successfully Post Published")
+    return redirect("blog:dashboard")
+
 
