@@ -116,6 +116,7 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 auth_login(request, user)
+                messages.success(request, "Login Successfully")
                 return redirect("blog:dashboard") #redirecting to dashboard after login
                 print("LOGIN SUCCESS")
     return render(request, 'blog/login.html',{'form':form})
@@ -136,7 +137,9 @@ def dashboard(request):
 #logout
 def logout(request):
     auth_logout(request)
+    messages.success(request, 'Loged out succesfully ')
     return redirect('blog:index')
+    
 
 #forgot_password
 def forgot_password(request):
