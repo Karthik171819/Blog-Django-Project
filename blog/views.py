@@ -17,8 +17,8 @@ from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
-from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group
 # Create your views here.
 #static demo data
 # posts = [
@@ -39,6 +39,10 @@ def index(request):
     return render(request,'blog/index.html', {'blog_title': blog_title, 'page_obj':page_obj}) 
 
 def detail(request, slug):
+    if not request.user.is_authenticated or not request.user.groups.exists():
+        messages.error(request, "you must be part of group to view any posts")
+        return redirect('blog:index')
+
     #getting static data
     #post= next((item for item in posts if item['id'] == int(post_id)), None)
     try:
@@ -91,8 +95,11 @@ def register(request):
         form = RegisterForm(request.POST) #in request calling here POST field
         if form.is_valid():
             user = form.save(commit=False) #user data created
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(form.cleaned_data['password']) #Hashing the password
             user.save()
+            #add user to readers group
+            readers_group, create = Group.objects.get_or_create(name="Readers") #name is getting from group table 
+            user.groups.add(readers_group) #adding user from groups property to auth user group table 
             messages.success(request, 'Registeration Successful.You can log in now')
             return redirect('blog:login')
     return render(request, 'blog/register.html', {'form':form})
@@ -185,6 +192,7 @@ def reset_password(request, uidb64, token):
 
 #new_post
 @login_required
+@permission_required('blog.add_post', raise_exception=True)
 def new_post(request):
     categories = Category.objects.all() #getting the categories data
     form = PostForm()
