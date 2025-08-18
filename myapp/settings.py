@@ -166,4 +166,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #login required urls
-LOGIN_URL = '/login' #from url
+LOGIN_URL = '/login' #from url 
